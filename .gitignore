@@ -1,0 +1,8 @@
+.DS_Store
+coverage/
+node_modules/
+example/node_modules/
+example/build/.module-cache/
+dist/.module-cache
+*.log*
+yarn.lock
