@@ -25,6 +25,11 @@ const Constants = {
   notification: {
     title: '',
     message: '',
+    style: {},
+    visible: false,
+    removed: false,
+    height: 0,
+    noAnimation: false,
     level: 'success',
     position: 'tr',
     autoDismiss: 5,
