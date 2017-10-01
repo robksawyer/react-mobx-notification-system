@@ -24,55 +24,15 @@ export default class NotificationStore {
   // Transition duration
   transitionDuration = 0.5;
 
+  // Notification uid
+  uid = 3400;
+
   constructor() {
-    console.log('Created Notification Store!');
     // Set some defaults
     this.initialized = false;
     this.notifications = new Map();
     this.components = new Map();
   }
-
-  /**
-   * addNotification
-   * Handles adding notifications to the queue.
-   * @see https://github.com/igorprado/react-notification-system#creating-a-notification
-   * @param {Object} settings Contains the notification settings.
-   * @return {void}
-   */
-  // @action('ADD_NOTIFICATION')
-  // addNotification(settings){
-  //   const text = settings.message;
-  //   const type = settings.level;
-  //   const notification = { text, type }
-  //
-  //   this.notifications.push(notification);
-  //   const newNotificationIndex = this.notifications.length-1;
-  //   setTimeout(() => {
-  //     this.deleteNotification(this.notifications[newNotificationIndex]);
-  //   }, 5000);
-  // }
-
-  /**
-   * deleteNotification
-   * Handles deleting a notification.
-   * @param {Object} notification
-   * @return
-   */
-  // @action('DELETE_NOTIFICATION')
-  // deleteNotification (notification) {
-  //   if(this.notifications.length < 2){
-  //     const filteredArray = this.notifications.filter(
-  //       (not) => {
-  //         return not !== notification;
-  //       }
-  //     );
-  //     this.notifications.replace(filteredArray);
-  //   } else {
-  //     // Clear the array if there's only one notification
-  //     this.notifications.clear();
-  //   }
-  // }
-  //
 
   /**
    * addNotification
@@ -88,8 +48,16 @@ export default class NotificationStore {
     // Create a temp notification object
     const tNotification = merge({}, Constants.notification, notificationSettings);
 
-    console.log('------- ADD NOTIFICATION -------');
-    console.log(tNotification);
+    // Cleanup the data.
+    tNotification.autoDismiss = parseInt(tNotification.autoDismiss, 10) || 5;
+
+    // Set a default uid
+    tNotification.uid = this.uid;
+    // Increment the uid
+    this.uid += 1;
+
+    // TODO: Figure out a better way to handle this.
+    tNotification.ref = `notification-${tNotification.uid}`;
 
     if (!tNotification.level) {
       throw new Error('notification level is required.');
@@ -112,32 +80,22 @@ export default class NotificationStore {
     tNotification.position = tNotification.position.toLowerCase();
     tNotification.level = tNotification.level.toLowerCase();
 
-    // Set the default properties of the notification
-    tNotification.style = {};
-    tNotification.visible = false;
-    tNotification.removed = false;
-    tNotification.isMounted = false;
-    tNotification.height = 0;
-    tNotification.noAnimation = false;
-    tNotification.dismissible = true;
-    tNotification.autoDismiss = parseInt(tNotification.autoDismiss, 10) || 5;
-
-    tNotification.uid = tNotification.uid || this.uid || 3400;
-    // TODO: Figure out a better way to handle this.
-    tNotification.ref = `notification-${tNotification.uid}`;
-    this.uid += 1;
-
     // do not add if the notification already exists based on supplied uid
-    for (let i = 0; i < this.notifications.size; i += 1) {
-      console.log(this.notifications.get(this.uid).uid);
-      if (this.notifications.get(this.uid).uid === tNotification.uid) {
-        return false;
+    if (this.notifications.size > 0) {
+      for (let i = 0; i < this.notifications.size; i += 1) {
+        try {
+          if (this.notifications.get(this.uid)) {
+            return false;
+          }
+        } catch (err) {
+          console.log(err);
+        }
       }
     }
 
     // Add the new notification to the stack
+    // You can retrieve a notification via `this.notifications.get(SOME_UID);`
     this.notifications.set(tNotification.uid, tNotification);
-
     return tNotification;
   }
 
@@ -230,6 +188,7 @@ export default class NotificationStore {
    */
   @action('CLEAR_NOTIFICATIONS')
   clearNotifications() {
+    // TODO: Clear the elements from the screen
     // const self = this;
     // Object.keys(this.refs)
     //   .forEach((container) => {
@@ -241,7 +200,7 @@ export default class NotificationStore {
     //     }
     //   });
 
-    // TODO: See if the mobx clear is better.
+    // Clear the store
     this.notifications.clear();
   }
 
