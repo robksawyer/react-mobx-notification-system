@@ -58,7 +58,7 @@ Add a reference to the `NotificationStore` to your global store.
 import { store } from 'rfx-core';
 
 import AppStore from './AppStore';
-import NotificationStore from '../components/NotificationSystem/NotificationStore';
+import NotificationStore from 'react-mobx-notification-system/NotificationStore';
 
 export default store.setup({
   appStore: AppStore,
