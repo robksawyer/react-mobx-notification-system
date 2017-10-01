@@ -4,6 +4,8 @@
 
 > A complete and totally customizable component for notifications in React and MobX.
 
+This project was mostly based on the work of [igorprado/react-notification-system](https://github.com/igorprado/react-notification-system). I implemented [react-move](https://github.com/react-tools/react-move) for transitions, removed React component `refs` in preference of [MobX stores](https://mobx.js.org/best/store.html), and made it work with [React 16](https://reactjs.org/blog/2017/09/26/react-v16.0.html). Enjoy! 
+
 <a href="https://robksawyer.github.io/react-mobx-notification-system/"><img width="728" src="example/src/images/screenshot.jpg" alt="Screenshot"></a>
 
 ## Installing
