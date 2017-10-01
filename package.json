@@ -1,6 +1,6 @@
 {
-  "name": "react-notification-system",
-  "version": "0.2.16",
+  "name": "react-mobx-notification-system",
+  "version": "0.1.1",
   "description": "A React Notification System fully customized",
   "main": "dist/NotificationSystem.js",
   "scripts": {
@@ -15,22 +15,23 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/igorprado/react-notification-system"
+    "url": "https://github.com/robksawyer/react-mobx-notification-system"
   },
   "keywords": [
     "react",
+    "mobx",
     "notification",
     "notification system",
     "component",
     "react component",
     "react-component"
   ],
-  "author": "Igor Prado",
+  "author": "Rob Sawyer",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/igorprado/react-notification-system/issues"
+    "url": "https://github.com/robksawyer/react-mobx-notification-system/issues"
   },
-  "homepage": "https://github.com/igorprado/react-notification-system",
+  "homepage": "https://github.com/robksawyer/react-mobx-notification-system",
   "dependencies": {
     "create-react-class": "^15.6.2",
     "object-assign": "^4.1.1",
