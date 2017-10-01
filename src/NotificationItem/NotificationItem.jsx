@@ -86,6 +86,7 @@ class NotificationItem extends Component {
     if (this.notification.autoDismiss) {
       this.notificationTimer = new Helpers.Timer(() => {
         self.hideNotification();
+        self.onTransitionEnd();
       }, this.dismissTime);
     }
 
@@ -160,13 +161,13 @@ class NotificationItem extends Component {
     }
   }
 
-  // onTransitionEnd() {
-  //   if (this.removeCount > 0) return;
-  //   if (this.notification.removed) {
-  //     this.removeCount += 1;
-  //     this.removeNotification();
-  //   }
-  // }
+  onTransitionEnd() {
+    if (this.removeCount > 0) return;
+    if (this.notification.removed) {
+      this.removeCount += 1;
+      this.removeNotification();
+    }
+  }
 
   /**
    * setOverrideStyle
@@ -439,7 +440,8 @@ class NotificationItem extends Component {
    */
   addNotification() {
     if (this.onAdd) {
-      this.onAdd(this.notification);
+      console.log(`Adding notification ${this.notification.uid}`);
+      this.onAdd(this.notification.uid);
     }
   }
 
@@ -448,7 +450,8 @@ class NotificationItem extends Component {
    */
   removeNotification() {
     if (this.onRemove) {
-      this.onRemove(this.notification);
+      console.log(`Removing notification ${this.notification.uid}`);
+      this.onRemove(this.notification.uid);
     }
   }
 
@@ -606,20 +609,10 @@ class NotificationItem extends Component {
         leave={leaveAnimation}
       >
         {(data) => {
-          // this.isAnimating = true;
           // Update the local notification styles based on the changes from react-move (Animate).
           this.notificationStyle.set('opacity', data.opacity);
           // Animate the property found in the constants.
           this.notificationStyle.set(tAnimationProps.property, data[tAnimationProps.property]);
-
-          // Check to see if the intro animation has completed.
-          if (data.opacity === 1 && !this.introAnimationComplete) {
-            // The following is handled by the Timer.
-            // if (this.notification.autoDismiss) {
-            //   // Dismiss the notification
-            //   this.hideNotification();
-            // }
-          }
 
           // Check to see if the outro animation has completed.
           if (data.opacity === 0 && !this.outroAnimationComplete && this.introAnimationComplete) {

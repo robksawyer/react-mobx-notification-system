@@ -64,6 +64,8 @@ class NotificationSystem extends Component {
    * Handles removing the notification from the store.
    */
   didNotificationGetRemoved(uid) {
+    console.log('didNotificationGetRemoved');
+    console.log(uid);
     let notification = this.store.notifications.get(uid);
     if (!notification) {
       return true;
@@ -92,6 +94,8 @@ class NotificationSystem extends Component {
    * Handles firing the callback passed.
    */
   didNotificationGetAdded(uid) {
+    console.log('didNotificationGetAdded');
+    console.log(uid);
     const notification = this.store.notifications.get(uid);
     if (notification && notification.onAdd) {
       notification.onAdd(notification);
