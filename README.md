@@ -1,47 +1,29 @@
 # React Notification System
 
-[![npm version](https://badge.fury.io/js/react-notification-system.svg)](http://badge.fury.io/js/react-notification-system) [![npm](https://img.shields.io/npm/dm/react-notification-system.svg)](https://www.npmjs.com/package/react-notification-system) [![Dependency Status](https://david-dm.org/igorprado/react-notification-system.svg)](https://david-dm.org/igorprado/react-notification-system) [![devDependency Status](https://david-dm.org/igorprado/react-notification-system/dev-status.svg)](https://david-dm.org/igorprado/react-notification-system#info=devDependencies) [![Build Status](https://travis-ci.org/igorprado/react-notification-system.svg?branch=master)](https://travis-ci.org/igorprado/react-notification-system) [![Coverage Status](https://coveralls.io/repos/igorprado/react-notification-system/badge.svg?branch=master&service=github)](https://coveralls.io/github/igorprado/react-notification-system?branch=master)
+[![npm version](https://badge.fury.io/js/react-mobx-notification-system.svg)](http://badge.fury.io/js/react-mobx-notification-system) [![npm](https://img.shields.io/npm/dm/react-mobx-notification-system.svg)](https://www.npmjs.com/package/react-mobx-notification-system) [![Dependency Status](https://david-dm.org/robksawyer/react-mobx-notification-system.svg)](https://david-dm.org/robksawyer/react-mobx-notification-system) [![devDependency Status](https://david-dm.org/robksawyer/react-mobx-notification-system/dev-status.svg)](https://david-dm.org/robksawyer/react-mobx-notification-system#info=devDependencies) [![Build Status](https://travis-ci.org/robksawyer/react-mobx-notification-system.svg?branch=master)](https://travis-ci.org/robksawyer/react-mobx-notification-system) [![Coverage Status](https://coveralls.io/repos/robksawyer/react-mobx-notification-system/badge.svg?branch=master&service=github)](https://coveralls.io/github/robksawyer/react-mobx-notification-system?branch=master)
 
-> A complete and totally customizable component for notifications in React.
+> A complete and totally customizable component for notifications in React and MobX.
 
-_Initially built for [Eterpret](http://dev.eterpret.com) @ [Scalable Path](http://www.scalablepath.com)._
-
-<a href="https://igorprado.github.io/react-notification-system/"><img width="728" src="example/src/images/screenshot.jpg" alt="Screenshot"></a>
+<a href="https://robksawyer.github.io/react-mobx-notification-system/"><img width="728" src="example/src/images/screenshot.jpg" alt="Screenshot"></a>
 
 ## Installing
 
-This component is available as CommonJS and UMD module. Install via NPM running:
+This component is available as CommonJS and UMD module. Install via yarn running:
 
 ```
-npm install react-notification-system
+yarn add react-mobx-notification-system
 ```
-
-### Important
-
-For **React ^0.14.x** or **React ^15.x.x**, use version 0.2.x:
-
-```
-npm install react-notification-system@0.2.x
-```
-
-For **React 0.13.x**, use version 0.1.x:
-
-```
-npm install react-notification-system@0.1.x
-```
-
-
 
 ## Using
 
 For optimal appearance, this component **must be rendered on a top level HTML element** in your application to avoid position conflicts.
 
-Here is a basic example. For a more advanced usage, please see the [example code](https://github.com/igorprado/react-notification-system/blob/master/example/src/scripts/App.jsx).
+Here is a basic example. For a more advanced usage, please see the [example code](https://github.com/robksawyer/react-mobx-notification-system/blob/master/example/src/scripts/App.jsx).
 
 ```js
 import React from 'react';
 import ReactDOM from 'react-dom';
-import NotificationSystem from 'react-notification-system'
+import NotificationSystem from 'react-mobx-notification-system'
 
 class MyRootApp extends Component {
   render() {
@@ -53,14 +35,43 @@ class MyRootApp extends Component {
     )
   }
 }
+```
 
-...later, no refs needed
+Add a reference to the `NotificationStore` to your global store.
 
-NotificationSystem.addNotification({
-  message: 'My Message',
-  level: 'info'
+```js
+/**
+ * stores.js
+ * Handles bringing all of the states together into a single callable method.
+ *
+ * Dependencies
+ *
+ * rfx-core: Collection of core functionalities of RFX Stack.
+ * @see https://github.com/foxhound87/rfx-core
+ *
+ * RFX Stack?
+ * @see https://github.com/foxhound87/rfx-stack/blob/master/DOCUMENTATION.md
+ *
+ */
+import { store } from 'rfx-core';
+
+import AppStore from './AppStore';
+import NotificationStore from '../components/NotificationSystem/NotificationStore';
+
+export default store.setup({
+  appStore: AppStore,
+  notificationStore: NotificationStore,
 });
 
+```
+
+Build a notification.
+
+```js
+notificationStore.addNotification({
+  message: 'Test',
+  level: 'warning'
+});
 ```
 
 ## Methods
@@ -165,18 +176,18 @@ var style = {
   }
 }
 
-<NotificationSystem ref="notificationSystem" style={style} />
+<NotificationSystem style={style} />
 
 ```
 
-Refer to [this file](https://github.com/igorprado/react-notification-system/blob/master/src/styles.js) to see what can you override.
+Refer to [this file](https://github.com/robksawyer/react-mobx-notification-system/blob/master/src/styles.js) to see what can you override.
 
 ### Disabling inline styles
 
 To disable all inline styles, just pass `false` to the prop `style`.
 
 ```js
-<NotificationSystem ref="notificationSystem" style={false} />
+<NotificationSystem style={false} />
 ```
 
 Here is the notification HTML:
@@ -197,15 +208,6 @@ Here is the notification HTML:
 
 ```
 
-#### Important
-
-Using this method you have to take care of **every style**, from containers positions to animations. To control animations, use the classes `notification-visible` and `notification-hidden`. If your CSS styles will not handle any animation (transition), you need to set the prop `noAnimation` to `true` when adding the Notification System component:
-
-```js
-<NotificationSystem ref="notificationSystem" noAnimation={true} />
-```
-
-See [#74](https://github.com/igorprado/react-notification-system/issues/74) for more details.
 
 ## Roadmap
 
@@ -217,19 +219,19 @@ See [#74](https://github.com/igorprado/react-notification-system/issues/74) for 
 Clone this repo by running:
 
 ```
-git clone git@github.com:igorprado/react-notification-system.git
+git clone git@github.com:robksawyer/react-mobx-notification-system.git
 ```
 
 Enter the project folder and install the dependencies:
 
 ```
-npm install
+yarn
 ```
 
 To start a development server and use the `example` app to load the component, type:
 
 ```
-npm start
+yarn start
 ```
 
 Open `http://localhost:8000`.
@@ -239,7 +241,7 @@ Open `http://localhost:8000`.
 Run the tests:
 
 ```
-npm test
+yarn test
 ```
 
 You can find the coverage details under `coverage/` folder.
