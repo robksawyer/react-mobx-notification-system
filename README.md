@@ -1,10 +1,10 @@
-# React Notification System
+# React MobX Notification System
 
 [![npm version](https://badge.fury.io/js/react-mobx-notification-system.svg)](http://badge.fury.io/js/react-mobx-notification-system) [![npm](https://img.shields.io/npm/dm/react-mobx-notification-system.svg)](https://www.npmjs.com/package/react-mobx-notification-system) [![Dependency Status](https://david-dm.org/robksawyer/react-mobx-notification-system.svg)](https://david-dm.org/robksawyer/react-mobx-notification-system) [![devDependency Status](https://david-dm.org/robksawyer/react-mobx-notification-system/dev-status.svg)](https://david-dm.org/robksawyer/react-mobx-notification-system#info=devDependencies) [![Build Status](https://travis-ci.org/robksawyer/react-mobx-notification-system.svg?branch=master)](https://travis-ci.org/robksawyer/react-mobx-notification-system) [![Coverage Status](https://coveralls.io/repos/robksawyer/react-mobx-notification-system/badge.svg?branch=master&service=github)](https://coveralls.io/github/robksawyer/react-mobx-notification-system?branch=master)
 
 > A complete and totally customizable component for notifications in React and MobX.
 
-This project was mostly based on the work of [igorprado/react-notification-system](https://github.com/igorprado/react-notification-system). I implemented [react-move](https://github.com/react-tools/react-move) for transitions, removed React component `refs` in preference of [MobX stores](https://mobx.js.org/best/store.html), and made it work with [React 16](https://reactjs.org/blog/2017/09/26/react-v16.0.html). Enjoy! 
+This project was mostly based on the work of [igorprado/react-notification-system](https://github.com/igorprado/react-notification-system). I implemented [react-move](https://github.com/react-tools/react-move) for transitions, removed React component `refs` in preference of [MobX stores](https://mobx.js.org/best/store.html), and made it work with [React 16](https://reactjs.org/blog/2017/09/26/react-v16.0.html). Enjoy!
 
 <a href="https://robksawyer.github.io/react-mobx-notification-system/"><img width="728" src="example/src/images/screenshot.jpg" alt="Screenshot"></a>
 
