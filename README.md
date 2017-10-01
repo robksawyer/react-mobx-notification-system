@@ -215,6 +215,7 @@ Here is the notification HTML:
 
 * Write new tests and improve coverage
 * Improve performance
+* Upgrade Webpack from 1 to 3
 
 ## Contributions
 
