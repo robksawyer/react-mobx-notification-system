@@ -213,7 +213,7 @@ Here is the notification HTML:
 
 ## Roadmap
 
-* Improve tests and coverage
+* Write new tests and improve coverage
 * Improve performance
 
 ## Contributions
@@ -241,6 +241,7 @@ Open `http://localhost:8000`.
 ---
 
 Run the tests:
+**WARNING: New tests need to be written. These are likely not working.**
 
 ```
 yarn test
