@@ -29,13 +29,17 @@ class NotificationContainer extends Component {
   }
 
   componentWillMount() {
+    const { position } = this.props;
     // Fix position if width is overrided
-    this.style = this.container(this.props.position);
+    this.style = this.container(position);
     if (this.overrideWidth &&
-      (this.props.position === Constants.positions.tc ||
-         this.props.position === Constants.positions.bc)) {
+      (position === Constants.positions.tc ||
+         position === Constants.positions.bc)) {
       this.style.marginLeft = -(this.overrideWidth / 2);
     }
+
+    // Add the notification components to a MobX map for display later.
+    this.getNotificationItems();
   }
 
   /**
@@ -50,27 +54,29 @@ class NotificationContainer extends Component {
       noAnimation,
       allowHTML,
       children,
+      position,
     } = this.props;
 
-    const { notificationStore } = this.props.store;
-    const notificationElements = [];
-    notificationStore.notifications.forEach(
-      value => (
-        notificationElements.push(
-          <NotificationItem
-            key={value.uid}
-            uid={value.uid}
-            noAnimation={noAnimation}
-            allowHTML={allowHTML}
-            onRemove={onRemove}
-            onAdd={onAdd}
-          >
-            {children}
-          </NotificationItem>,
-        )
-      ),
+    this.store.notifications.forEach(
+      (value) => {
+        // Only add the notification item if the position matches
+        if (position === value.position) {
+          const tNote = this.store.notifications.get(value.uid);
+          tNote.component =
+              (<NotificationItem
+                key={value.uid}
+                uid={value.uid}
+                noAnimation={noAnimation}
+                allowHTML={allowHTML}
+                onRemove={onRemove}
+                onAdd={onAdd}
+              >
+                {children}
+              </NotificationItem>);
+          this.store.notifications.set(value.uid, tNote);
+        }
+      },
     );
-    return notificationElements;
   }
 
   /**
@@ -104,46 +110,35 @@ class NotificationContainer extends Component {
   @observable overrideWidth;
 
   render() {
-    const { notificationStore } = this.props.store;
-    if ([
-      Constants.positions.bl,
-      Constants.positions.br,
-      Constants.positions.bc,
-    ].indexOf(this.props.position) > -1) {
-      // TODO: Why is the array being reversed?
-      notificationStore.notifications.reverse();
+    const { position } = this.props;
+    // TODO: Figure out why this code is here.
+    // if ([
+    //   Constants.positions.bl,
+    //   Constants.positions.br,
+    //   Constants.positions.bc,
+    // ].indexOf(position) > -1) {
+    //   this.store.notifications.values().reverse();
+    // }
+    const notifications = [];
+    if (this.store.notifications.size > 0) {
+      this.store.notifications.forEach(
+        (data) => {
+          if (data.position === position) {
+            notifications.push(this.store.notifications.get(data.uid).component);
+          }
+        },
+      );
     }
-
-    const notificationItemElements = this.getNotificationItems();
     return (
       <div
-        className={`notifications notifications-${this.props.position}`}
+        className={`notifications notifications-${position}`}
         style={this.style}
       >
-        {notificationItemElements}
+        { notifications }
       </div>
     );
   }
 }
-
-// const Style = {
-//   overrideStyle: PropTypes.objectOf(PropTypes.string),
-//   overrideWidth: PropTypes.boolean,
-//   setOverrideStyle: PropTypes.function,
-//   wrapper: PropTypes.function,
-//   container: PropTypes.function,
-//   elements: PropTypes.objectOf(PropTypes.string),
-//   byElement: PropTypes.function,
-// };
-
-// const NotificationItem = {
-//   position: PropTypes.string,
-//   level: PropTypes.string,
-//   autoDismiss: PropTypes.boolean,
-//   ref: PropTypes.function,
-//   uid: PropTypes.number,
-// };
-//
 
 NotificationContainer.defaultProps = {
   position: 'tr',

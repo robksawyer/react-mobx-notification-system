@@ -25,9 +25,7 @@ class NotificationSystem extends Component {
     super(props);
 
     this.isMounted = false;
-
     this.store = props.store.notificationStore;
-
     this.overrideStyle = props.style;
   }
 
@@ -55,9 +53,7 @@ class NotificationSystem extends Component {
    */
   wrapper() {
     if (!this.overrideStyle) return {};
-    return merge({}, styles.Wrapper, this.overrideStyle);
-    // UPDATE: Removed Wrapper. TODO: Test this more.
-    // return merge({}, styles.Wrapper, this.overrideStyle.Wrapper);
+    return merge({}, styles.Wrapper, this.overrideStyle.Wrapper);
   }
 
   @observable isMounted;
@@ -68,25 +64,24 @@ class NotificationSystem extends Component {
    * Handles removing the notification from the store.
    */
   didNotificationGetRemoved(uid) {
-    const { notificationStore } = this.props.store;
-    let notification = notificationStore.notifications.get(uid);
+    let notification = this.store.notifications.get(uid);
     if (!notification) {
       return true;
     }
 
     // Remove the notification from the store map
-    notificationStore.notifications.delete(uid);
+    this.store.notifications.delete(uid);
 
     // Check to see if the notification still exists.
-    this.notification = notificationStore.notifications.get(uid);
+    const notificationCheck = this.store.notifications.get(uid);
 
     // Fire the callback
-    if (!this.notification && notification.onRemove) {
+    if (!notificationCheck && notification.onRemove) {
       notification.onRemove(notification);
       notification = null;
     }
     // Send a result back
-    if (!this.notification) {
+    if (!notificationCheck) {
       return true;
     }
     return false;
@@ -97,9 +92,7 @@ class NotificationSystem extends Component {
    * Handles firing the callback passed.
    */
   didNotificationGetAdded(uid) {
-    const { notificationStore } = this.props.store;
-    const notification = notificationStore.notifications.get(uid);
-
+    const notification = this.store.notifications.get(uid);
     if (notification && notification.onAdd) {
       notification.onAdd(notification);
     }
@@ -111,19 +104,17 @@ class NotificationSystem extends Component {
       allowHTML,
     } = this.props;
 
-    const { notificationStore } = this.props.store;
-
     let containers = null;
 
     // Get the notifications from the store.
     // const notifications = notificationStore.notifications;
-    if (notificationStore.notifications.size) {
+    if (this.store.notifications.size) {
       // Make the containers for the notification.
       containers = Object.keys(Constants.positions).map(
         (position) => {
           // Get the notifications based on a certain position.
           const tNotifications = [];
-          notificationStore.notifications.forEach(
+          this.store.notifications.forEach(
             (value) => {
               if (position === value.position) {
                 tNotifications.push(value);

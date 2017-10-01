@@ -71,8 +71,7 @@ class NotificationItem extends Component {
     this.notification = this.store.notifications.get(this.uid);
 
     // Set the final actual time locally
-    this.dismissTime = parseInt(this.notification.autoDismiss) * 1000;
-    console.log(this.dismissTime);
+    this.dismissTime = parseInt(this.notification.autoDismiss, 0) * 1000;
 
     if (!this.notification) {
       console.log(`Issue finding notification with uid ${this.uid}.`);
@@ -81,7 +80,6 @@ class NotificationItem extends Component {
   }
 
   componentWillMount() {
-    console.log('NotificationItem/componentWillMount');
     const self = this;
 
     // Set a timer to auto dismiss the notification if ...
@@ -128,8 +126,6 @@ class NotificationItem extends Component {
   }
 
   componentDidMount() {
-    console.log('NotificationItem/componentDidMount');
-
     // const component = this.componentReference;
     // console.log(component);
     // const transitionEvent = whichTransitionEvent();
@@ -151,7 +147,6 @@ class NotificationItem extends Component {
   }
 
   componentWillUnmount() {
-    console.log('NotificationItem/componentWillUnmount');
     // const component = this.componentReference;
     // console.log(component);
     // const transitionEvent = whichTransitionEvent();
@@ -177,8 +172,6 @@ class NotificationItem extends Component {
    * setOverrideStyle
    */
   setOverrideStyle(style) {
-    console.log('NotificationItem/setOverrideStyle');
-    console.log(style);
     this.notification.overrideStyle = style;
   }
 
@@ -188,7 +181,6 @@ class NotificationItem extends Component {
   getCssPropertyByPosition() {
     const position = this.notification.position;
     let css = {};
-
     switch (position) {
       case Constants.positions.tl:
       case Constants.positions.bl:
@@ -321,10 +313,6 @@ class NotificationItem extends Component {
     );
 
     const property = cssByPos.get('property');
-    // console.log('---------- property ---------');
-    // console.log(property);
-    // console.log('---------- cssByPos.get(value) ---------');
-    // console.log(cssByPos.get('value'));
     // if (!this.notification.visible && !this.notification.removed) {
     //   style.set(property, cssByPos.get('value'));
     // }
@@ -336,13 +324,6 @@ class NotificationItem extends Component {
 
     style.set('height', this.notification.height);
     style.set(property, cssByPos.get('value'));
-
-    // console.log('------------- this.notification.visible --------------');
-    // console.log(this.notification.visible);
-    // console.log('------------- this.notification.removed --------------');
-    // console.log(this.notification.removed);
-    // console.log('------------- style.height --------------');
-    // console.log(style.height);
 
     if (this.notification.removed) {
       style.set('overlay', 'hidden');
@@ -358,9 +339,6 @@ class NotificationItem extends Component {
     //   : this.styles.get('notification').isHidden.opacity;
     //
     // style.set('opacity', opacity);
-
-    // console.log('------------- Current Opacity --------------');
-    // console.log(opacity);
 
     return style;
   }
@@ -395,16 +373,6 @@ class NotificationItem extends Component {
       const styleElement = self.elements.get(element);
       const override = self.overrideStyle[styleElement] || {};
       if (!self.overrideStyle) return {};
-      // console.log('------------ byElement -----------');
-      // console.log(self.elements);
-      // console.log(element);
-      // console.log(styleElement);
-      // console.log(override);
-      // console.log(styles[styleElement].DefaultStyle);
-      // console.log(styles[styleElement][level]);
-      // console.log(override.DefaultStyle);
-      // console.log(override[level]);
-      // console.log('----------------------------------');
       return merge(
         {},
         styles[styleElement].DefaultStyle,
@@ -433,7 +401,6 @@ class NotificationItem extends Component {
    * Handles running the CSS transition.
    */
   showNotification() {
-    console.log('NotificationItem/showNotification');
     if (this.isMounted) {
       this.notification.visible = true;
       this.notification.removed = false;
@@ -451,9 +418,6 @@ class NotificationItem extends Component {
    * handleMouseEnter
    */
   handleMouseEnter = () => {
-    console.log('NotificationItem/handleMouseEnter');
-    console.log(this.notification);
-
     // Pause the autoDismiss timer.
     if (this.notification.autoDismiss) {
       this.notificationTimer.pause();
@@ -464,9 +428,6 @@ class NotificationItem extends Component {
    * handleMouseLeave
    */
   handleMouseLeave = () => {
-    console.log('NotificationItem/handleMouseLeave');
-    console.log(this.notification);
-
     // Resume the autoDismiss timer.
     if (this.notification.autoDismiss) {
       this.notificationTimer.resume();
@@ -477,7 +438,6 @@ class NotificationItem extends Component {
    * addNotification
    */
   addNotification() {
-    console.log('NotificationItem/addNotification');
     if (this.onAdd) {
       this.onAdd(this.notification);
     }
@@ -487,7 +447,6 @@ class NotificationItem extends Component {
    * removeNotification
    */
   removeNotification() {
-    console.log('NotificationItem/removeNotification');
     if (this.onRemove) {
       this.onRemove(this.notification);
     }
@@ -497,8 +456,6 @@ class NotificationItem extends Component {
    * hideNotification
    */
   hideNotification() {
-    console.log('Hiding notification.');
-
     if (this.isMounted) {
       this.notification.visible = false;
       this.notification.removed = true;
@@ -596,49 +553,67 @@ class NotificationItem extends Component {
       actionButtonElement = children;
     }
 
+    const defaultEnter = {
+      opacity: [1],
+      timing: {
+        duration: 750,
+        ease: easeExpInOut,
+      },
+    };
+    const defaultUpdate = {
+      opacity: [1],
+      timing: {
+        duration: 750,
+        ease: easeExpInOut,
+      },
+    };
+    const defaultLeave = {
+      opacity: [0],
+      timing: {
+        duration: 500,
+        ease: easeExpInOut,
+      },
+    };
+
+    const tAnimationProps = this.getCssPropertyByPosition();
+    const startAnimationByPosition = {};
+    startAnimationByPosition[tAnimationProps.property] = `${tAnimationProps.value}px`;
+    const startAnimation = Object.assign(
+      {},
+      startAnimationByPosition,
+      defaultEnter,
+    );
+    const enterAnimation = Object.assign(
+      {},
+      styles.Containers[this.notification.position],
+      defaultEnter,
+    );
+    const updateAnimation = Object.assign(
+      {},
+      defaultUpdate,
+    );
+    const leaveAnimation = Object.assign(
+      {},
+      startAnimationByPosition,
+      defaultLeave,
+    );
     return (
       <Animate
         show={!this.introAnimationComplete}
-        start={{
-          opacity: 0,
-          right: -200,
-        }}
-        enter={{
-          opacity: [1],
-          right: [0],
-          timing: {
-            duration: 750,
-            ease: easeExpInOut,
-          },
-        }}
-        update={{
-          opacity: [1],
-          right: [1],
-          timing: {
-            duration: 750,
-            ease: easeExpInOut,
-          },
-        }}
-        leave={{
-          opacity: [0],
-          right: [-200],
-          timing: {
-            // delay: this.dismissTime,
-            duration: 500,
-            ease: easeExpInOut,
-          },
-        }}
+        start={startAnimation}
+        enter={enterAnimation}
+        update={updateAnimation}
+        leave={leaveAnimation}
       >
-        {({ opacity, right }) => {
+        {(data) => {
           // this.isAnimating = true;
-
           // Update the local notification styles based on the changes from react-move (Animate).
-          this.notificationStyle.set('opacity', opacity);
-          this.notificationStyle.set('right', right);
+          this.notificationStyle.set('opacity', data.opacity);
+          // Animate the property found in the constants.
+          this.notificationStyle.set(tAnimationProps.property, data[tAnimationProps.property]);
 
           // Check to see if the intro animation has completed.
-          if (opacity === 1 && !this.introAnimationComplete) {
-            console.log('--------------- INTRO ANIMATION COMPLETE -----------------');
+          if (data.opacity === 1 && !this.introAnimationComplete) {
             // The following is handled by the Timer.
             // if (this.notification.autoDismiss) {
             //   // Dismiss the notification
@@ -647,8 +622,7 @@ class NotificationItem extends Component {
           }
 
           // Check to see if the outro animation has completed.
-          if (opacity === 0 && !this.outroAnimationComplete && this.introAnimationComplete) {
-            console.log('--------------- OUTRO ANIMATION COMPLETE -----------------');
+          if (data.opacity === 0 && !this.outroAnimationComplete && this.introAnimationComplete) {
             this.outroAnimationComplete = true;
           }
 
